@@ -7,9 +7,7 @@ async function request(path, options = {}) {
   };
 
   const token = localStorage.getItem('authToken');
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
+  if (token) headers.Authorization = `Bearer ${token}`;
 
   const response = await fetch(`${API_BASE}${path}`, {
     ...options,
@@ -21,11 +19,7 @@ async function request(path, options = {}) {
     data = await response.json();
   } catch (_) {}
 
-  if (!response.ok) {
-    const message = data?.message || 'Ошибка запроса';
-    throw new Error(message);
-  }
-
+  if (!response.ok) throw new Error(data?.message || 'Ошибка запроса');
   return data;
 }
 
@@ -37,20 +31,29 @@ export const api = {
         body: JSON.stringify({ login, passwordHash }),
       });
     },
-
-    register(login, passwordHash, captchaToken) {
+    register(login, passwordHash) {
       return request('/auth/register', {
         method: 'POST',
-        body: JSON.stringify({ login, passwordHash, captchaToken }),
+        body: JSON.stringify({ login, passwordHash }),
       });
     },
-
-    me() {
-      return request('/auth/me');
-    },
-
-    logout() {
+    logoutLocal() {
       localStorage.removeItem('authToken');
+    },
+  },
+
+  results: {
+    list() {
+      return request('/results', { method: 'GET' });
+    },
+    check(x, y, r) {
+      return request('/area/check', {
+        method: 'POST',
+        body: JSON.stringify({ x, y, r }),
+      });
+    },
+    clear() {
+      return request('/results/clear', { method: 'POST' });
     },
   },
 };

@@ -1,0 +1,301 @@
+/* src/styles/main.css */
+
+/* точки */
+:root {
+  --pt-ok: #16a34a;
+  --pt-bad: #dc2626;
+  --pt-gray: #9ca3af;
+  --pt-stroke: rgba(17, 24, 39, 0.35);
+}
+
+.container--wide {
+  justify-content: center;
+  align-items: stretch;
+}
+
+.main-grid {
+  width: 100%;
+  display: grid;
+  gap: 16px;
+}
+
+/* мобильный: колоночка */
+@media (max-width: 737px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* планшет: также 1 колонка (удобнее по ширине) */
+@media (min-width: 738px) and (max-width: 1025px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* десктоп: две колонки */
+@media (min-width: 1026px) {
+  .main-grid {
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: start;
+  }
+}
+
+.card--panel {
+  max-width: none;
+}
+
+.card--graph {
+  max-width: none;
+}
+
+.card__title {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+  color: var(--text);
+}
+
+.input:focus {
+  border-color: rgba(37, 99, 235, 0.6);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.input--error {
+  border-color: rgba(220, 38, 38, 0.55);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.hint--danger {
+  color: var(--danger);
+}
+
+.radio-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 10px;
+  cursor: pointer;
+  user-select: none;
+  background: #fff;
+}
+
+.radio input {
+  margin: 0;
+}
+
+.radio--on {
+  border-color: rgba(37, 99, 235, 0.35);
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.btn {
+  margin-top: 4px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(37, 99, 235, 0.25);
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.alert {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.alert--warn {
+  border-color: rgba(234, 179, 8, 0.45);
+  background: rgba(234, 179, 8, 0.12);
+  color: #92400e;
+}
+
+.logout {
+  margin-top: 8px;
+}
+
+.link {
+  color: var(--primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* таблица */
+.table-title {
+  margin: 18px 0 10px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.table-wrap {
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 520px;
+  background: #fff;
+}
+
+.table th,
+.table td {
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  text-align: left;
+}
+
+.table thead th {
+  background: #f9fafb;
+  font-weight: 800;
+}
+
+.table__empty {
+  text-align: center;
+  color: var(--muted);
+}
+
+.ok {
+  color: #166534;
+  font-weight: 800;
+}
+
+.bad {
+  color: #991b1b;
+  font-weight: 800;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* график */
+.graph-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.graph-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.svg {
+  cursor: crosshair;
+  user-select: none;
+}
+
+.svg-bg {
+  fill: #ffffff;
+}
+
+.area rect,
+.area path {
+  fill: rgba(37, 99, 235, 0.22);
+  stroke: rgba(37, 99, 235, 0.55);
+  stroke-width: 1;
+}
+
+.axis {
+  stroke: rgba(17, 24, 39, 0.55);
+  stroke-width: 1;
+}
+
+.axis-label {
+  font-size: 12px;
+  fill: rgba(17, 24, 39, 0.75);
+  font-weight: 700;
+}
+
+.tick {
+  stroke: rgba(17, 24, 39, 0.55);
+  stroke-width: 1;
+}
+
+.tick-label {
+  font-size: 12px;
+  fill: rgba(17, 24, 39, 0.75);
+  font-weight: 700;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.btn--ghost {
+  background: #fff;
+  color: var(--primary);
+  border: 1px solid rgba(37, 99, 235, 0.35);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  background: rgba(37, 99, 235, 0.08);
+}
