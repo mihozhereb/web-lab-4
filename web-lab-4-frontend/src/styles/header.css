@@ -1,0 +1,41 @@
+/* src/styles/header.css */
+.app-header {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header__inner {
+  padding: 12px 16px;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.app-header__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.35;
+}
+
+/* Планшет */
+@media (min-width: 738px) and (max-width: 1025px) {
+  .app-header__inner {
+    padding: 14px 24px;
+  }
+  .app-header__title {
+    font-size: 16px;
+    text-align: center;
+  }
+}
+
+/* Десктоп */
+@media (min-width: 1026px) {
+  .app-header__inner {
+    padding: 16px 32px;
+  }
+  .app-header__title {
+    font-size: 16px;
+    text-align: center;
+  }
+}
