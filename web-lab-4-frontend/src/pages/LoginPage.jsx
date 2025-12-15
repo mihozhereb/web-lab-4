@@ -21,10 +21,16 @@ export function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
+  const loginError =
+  login && (login.length < 3 || login.length > 64)
+    ? 'Логин должен содержать от 3 до 64 символов'
+    : null;
+
   const isRegister = mode === 'register';
 
   const canSubmit = useMemo(() => {
     if (!login || !password) return false;
+    if (login.length < 3 || login.length > 64) return false;
     if (isRegister && password !== password2) return false;
     return true;
   }, [login, password, password2, isRegister]);
@@ -92,14 +98,19 @@ export function LoginPage() {
 
           <form class="form" onSubmit={handleSubmit}>
             <div class="field">
-              <label class="label">Логин</label>
-              <input
-                class="input"
-                type="text"
-                value={login}
-                onInput={(e) => setLogin(e.target.value)}
-                required
-              />
+                <label class="label">Логин</label>
+                <input
+                    class={`input ${loginError ? 'input--error' : ''}`}
+                    type="text"
+                    value={login}
+                    onInput={(e) => setLogin(e.target.value)}
+                    required
+                />
+                {loginError && (
+                    <div class="hint hint--danger">
+                    {loginError}
+                    </div>
+                )}
             </div>
 
             <div class="field">

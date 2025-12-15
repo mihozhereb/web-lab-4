@@ -21,9 +21,16 @@ async function request(path, options = {}) {
     headers,
   });
 
-  if (response.status === 401 || response.status === 403) {
+  console.log(response);
+
+  if (response.status === 401) {
+    localStorage.removeItem('authToken');
+    throw new Error('Неверный логин или пароль');
+  } else if (response.status === 403) {
     localStorage.removeItem('authToken');
     throw new Error('Невалидная сессия');
+  } else if (response.status === 400) {
+    throw new Error('Логин уже занят');
   }
 
   let data = null;
@@ -66,6 +73,12 @@ export const api = {
     },
     clear() {
       return request('/results/clear', { method: 'POST' });
+    },
+  },
+
+  metrics: {
+    summary() {
+      return request('/metrics/summary', { method: 'GET' });
     },
   },
 };

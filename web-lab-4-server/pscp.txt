@@ -1,0 +1,14 @@
+pscp -r -P 2222 "C:\Users\user\Desktop\дз\веб\web-lab-4\web-lab-4-frontend\dist\*" s465887@helios.cs.ifmo.ru:/home/studs/s465887/var/www
+
+pscp -r -P 2222 "C:\Users\user\Desktop\дз\веб\web-lab-4\web-lab-4-frontend\httpd.conf" s465887@helios.cs.ifmo.ru:/home/studs/s465887/httpd-root/conf
+
+pscp -r -P 2222 "C:\Users\user\Desktop\дз\веб\web-lab-4\web-lab-4-server\build\libs\server-0.0.1-SNAPSHOT.jar" s465887@helios.cs.ifmo.ru:/home/studs/s465887/web/web-lab-4
+
+httpd -f ~/httpd-root/conf/httpd.conf -k restart
+
+ssh -L 24123:localhost:24123 s465887@helios.cs.ifmo.ru -p 2222
+
+ssh -L 24124:localhost:24124 s465887@helios.cs.ifmo.ru -p 2222
+
+xczS@8170
+

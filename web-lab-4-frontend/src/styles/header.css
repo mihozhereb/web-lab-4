@@ -1,4 +1,3 @@
-/* src/styles/header.css */
 .app-header {
   background: #ffffff;
   border-bottom: 1px solid var(--border);
@@ -18,7 +17,6 @@
   line-height: 1.35;
 }
 
-/* Планшет */
 @media (min-width: 738px) and (max-width: 1025px) {
   .app-header__inner {
     padding: 14px 24px;
@@ -29,7 +27,6 @@
   }
 }
 
-/* Десктоп */
 @media (min-width: 1026px) {
   .app-header__inner {
     padding: 16px 32px;

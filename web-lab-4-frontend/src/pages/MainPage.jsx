@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { route } from 'preact-router';
 import { Header } from '../components/header';
+import { MetricsPanel } from '../components/MetricsPanel';
 import { api } from '../api/client';
 import '../styles/layout.css';
 import '../styles/header.css';
@@ -8,6 +9,10 @@ import '../styles/main.css';
 
 function isAuthenticated() {
   return Boolean(localStorage.getItem('authToken'));
+}
+
+function clamp(n, min, max) {
+  return Math.min(max, Math.max(min, n));
 }
 
 function parseNumberStrict(str) {
@@ -19,10 +24,8 @@ function parseNumberStrict(str) {
 }
 
 export function MainPage() {
-  // R: по умолчанию 1
   const [r, setR] = useState(1);
 
-  // поля ввода
   const [xText, setXText] = useState('');
   const [yText, setYText] = useState('');
 
@@ -39,7 +42,6 @@ export function MainPage() {
     if (!isAuthenticated()) route('/', true);
   }, []);
 
-  // загрузка истории
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -87,7 +89,6 @@ export function MainPage() {
       const data = await api.results.check(x, y, rr);
       const point = data?.point || data;
 
-      // Требуем, чтобы hit пришёл с сервера
       if (typeof point?.hit !== 'boolean') {
         throw new Error('Сервер не вернул поле hit');
       }
@@ -100,7 +101,7 @@ export function MainPage() {
         ts: point.ts ?? new Date().toISOString(),
       };
 
-      setResults((prev) => [normalized, ...prev]);
+      setResults((prev) => [...prev, normalized]);
     } catch (e) {
       setServerError(e.message || 'Ошибка проверки на сервере');
     } finally {
@@ -114,12 +115,11 @@ export function MainPage() {
     await submitPoint(validated.x, validated.y, r);
   }
 
-  // --- SVG ---
   const W = 360;
   const H = 360;
   const cx = W / 2;
   const cy = H / 2;
-  const pxPerUnit = 110 / 3; // масштаб зависит от выбранного R
+  const pxPerUnit = 110 / 3;
 
   function toSvgX(x) { return cx + x * pxPerUnit; }
   function toSvgY(y) { return cy - y * pxPerUnit; }
@@ -135,8 +135,11 @@ export function MainPage() {
     const x = (mx - cx) / pxPerUnit;
     const y = (cy - my) / pxPerUnit;
 
-    const xr = Math.round(x * 100) / 100;
-    const yr = Math.round(y * 100) / 100;
+    const xn = clamp(x, -3, 3);
+    const yn = clamp(y, -3, 5);
+
+    const xr = Math.round(xn * 100) / 100;
+    const yr = Math.round(yn * 100) / 100;
 
     setXText(String(xr));
     setYText(String(yr));
@@ -160,7 +163,7 @@ export function MainPage() {
     setLoading(true);
     setServerError(null);
     try {
-      await api.results.clear(); // псевдо REST
+      await api.results.clear();
       setResults([]);
     } catch (e) {
       setServerError(e.message || 'Не удалось очистить историю на сервере');
@@ -169,22 +172,16 @@ export function MainPage() {
     }
   }
 
-  // Цвет точки по текущему выбранному R:
-  // если точка проверена при другом R -> серый
-  // иначе зелёный/красный по hit (пришёл с сервера)
   function pointColor(p) {
     if (Number(p.r) !== Number(r)) return 'var(--pt-gray)';
     return p.hit ? 'var(--pt-ok)' : 'var(--pt-bad)';
   }
 
-  // --- область (как в варианте) ---
-  // Прямоугольник: [-R,0] x [0,R]
   const rectX = toSvgX(-r);
   const rectY = toSvgY(r);
   const rectW = r * pxPerUnit;
   const rectH = r * pxPerUnit;
 
-  // Четверть круга (x>=0, y>=0): сектор от (0,R) до (R,0)
   const arcStart = { x: toSvgX(0), y: toSvgY(r) };
   const arcEnd = { x: toSvgX(r), y: toSvgY(0) };
   const arcR = r * pxPerUnit;
@@ -195,7 +192,6 @@ export function MainPage() {
     Z
   `;
 
-  // Треугольник: (0,0), (R/2,0), (0,-R/2)
   const triPath = `
     M ${toSvgX(0)} ${toSvgY(0)}
     L ${toSvgX(r / 2)} ${toSvgY(0)}
@@ -351,7 +347,7 @@ export function MainPage() {
                       <td colspan="5" class="table__empty">Нет результатов</td>
                     </tr>
                   ) : (
-                    results.slice(0, 50).map((p, idx) => (
+                    results.map((p, idx) => (
                       <tr key={p.ts + '_' + idx}>
                         <td>{Number(p.x).toFixed(2)}</td>
                         <td>{Number(p.y).toFixed(2)}</td>
@@ -372,7 +368,7 @@ export function MainPage() {
 
           <section class="card card--panel">
             <h3 class="table-title">Metrics</h3>
-            <div class="empty-box"> </div>
+            <MetricsPanel />
           </section>
         </div>
       </main>
