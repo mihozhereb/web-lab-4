@@ -10,10 +10,6 @@ function isAuthenticated() {
   return Boolean(localStorage.getItem('authToken'));
 }
 
-function clamp(n, min, max) {
-  return Math.min(max, Math.max(min, n));
-}
-
 function parseNumberStrict(str) {
   const s = String(str).trim().replace(',', '.');
   if (s === '' || s === '-' || s === '+') return { ok: false, value: null };
@@ -123,7 +119,7 @@ export function MainPage() {
   const H = 360;
   const cx = W / 2;
   const cy = H / 2;
-  const pxPerUnit = 110 / r; // масштаб зависит от выбранного R
+  const pxPerUnit = 110 / 3; // масштаб зависит от выбранного R
 
   function toSvgX(x) { return cx + x * pxPerUnit; }
   function toSvgY(y) { return cy - y * pxPerUnit; }
@@ -139,11 +135,8 @@ export function MainPage() {
     const x = (mx - cx) / pxPerUnit;
     const y = (cy - my) / pxPerUnit;
 
-    const xn = clamp(x, -3, 3);
-    const yn = clamp(y, -3, 5);
-
-    const xr = Math.round(xn * 100) / 100;
-    const yr = Math.round(yn * 100) / 100;
+    const xr = Math.round(x * 100) / 100;
+    const yr = Math.round(y * 100) / 100;
 
     setXText(String(xr));
     setYText(String(yr));
@@ -228,6 +221,7 @@ export function MainPage() {
                 ref={svgRef}
                 width={360}
                 height={360}
+                viewBox="0 0 360 360"
                 class="svg"
                 onClick={onSvgClick}
               >
@@ -354,7 +348,7 @@ export function MainPage() {
                 <tbody>
                   {results.length === 0 ? (
                     <tr>
-                      <td colspan="5" class="table__empty">Пока нет результатов</td>
+                      <td colspan="5" class="table__empty">Нет результатов</td>
                     </tr>
                   ) : (
                     results.slice(0, 50).map((p, idx) => (
@@ -374,6 +368,11 @@ export function MainPage() {
             <button class="btn btn--ghost" type="button" onClick={onClearHistory} disabled={loading}>
                 Очистить историю
             </button>
+          </section>
+
+          <section class="card card--panel">
+            <h3 class="table-title">Metrics</h3>
+            <div class="empty-box"> </div>
           </section>
         </div>
       </main>

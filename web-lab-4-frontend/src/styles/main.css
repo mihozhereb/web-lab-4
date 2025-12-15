@@ -33,11 +33,20 @@
   }
 }
 
-/* десктоп: две колонки */
+/* десктоп: 2 колонки, 2 строки
+   верх: график + форма (одинаковая высота)
+   низ: история + пустая секция (на всю ширину) */
 @media (min-width: 1026px) {
   .main-grid {
     grid-template-columns: 1.1fr 0.9fr;
-    align-items: start;
+    grid-auto-rows: 1fr;
+    align-items: stretch;
+  }
+
+  /* нижние секции на всю ширину */
+  .main-grid > .card:nth-child(3),
+  .main-grid > .card:nth-child(4) {
+    grid-column: 1 / -1;
   }
 }
 
@@ -53,6 +62,26 @@
   margin: 0 0 12px;
   font-size: 18px;
   font-weight: 800;
+}
+
+/* чтобы верхние карточки растягивались и их внутренности тянулись */
+@media (min-width: 1026px) {
+  .card--graph,
+  .card--panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .graph-box {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .form {
+    flex: 1;
+    min-height: 0;
+  }
 }
 
 .form {
@@ -298,4 +327,32 @@
 
 .btn--ghost:hover:not(:disabled) {
   background: rgba(37, 99, 235, 0.08);
+}
+
+/* --- MOBILE FIX: ничего не вылезает за экран --- */
+@media (max-width: 737px) {
+  .card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .table {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .table-wrap {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .graph-box {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .svg {
+    max-width: 100%;
+    height: auto;
+  }
 }
